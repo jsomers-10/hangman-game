@@ -5,15 +5,87 @@ import  java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
             Scanner sc = new Scanner(System.in);
-            String[] words = {"apple", "bread", "chair", "table", "clock", "plant", "smile", "house", "river", "beach",
-                    "train", "shirt", "light", "phone", "music", "glass", "stone", "water", "mouse", "paper",
-                    "candy", "pizza", "fruit", "jungle", "shadow", "bright", "wooden", "happy", "sleep", "laugh",
-                    "dance", "drink", "drive", "watch", "learn", "reader", "write", "paint", "build", "clean",
-                    "money", "store", "school", "friend", "family", "people", "teacher", "student", "office", "window",
-                    "garden", "flower", "animal", "kitten", "puppy", "horse", "tiger", "zebra", "monkey", "rabbit",
-                    "summer", "winter", "spring", "autumn", "sunny", "cloudy", "rainy", "storm", "snowy", "breeze",
-                    "travel", "ticket", "hotel", "flight", "luggage", "camera", "picture", "memory", "holiday", "weekend",
-                    "cookie", "butter", "cheese", "sugar", "coffee", "dinner", "lunch", "snack", "dessert", "breakfast"};
+            Category[] words = {
+                    // Food
+                    new Category("Food", "apple"),
+                    new Category("Food", "bread"),
+                    new Category("Food", "pizza"),
+                    new Category("Food", "candy"),
+                    new Category("Food", "butter"),
+                    new Category("Food", "cheese"),
+                    new Category("Food", "coffee"),
+                    new Category("Food", "dinner"),
+                    new Category("Food", "dessert"),
+                    new Category("Food", "breakfast"),
+
+                    // Animals
+                    new Category("Animals", "kitten"),
+                    new Category("Animals", "puppy"),
+                    new Category("Animals", "horse"),
+                    new Category("Animals", "tiger"),
+                    new Category("Animals", "zebra"),
+                    new Category("Animals", "monkey"),
+                    new Category("Animals", "rabbit"),
+
+                    // Nature
+                    new Category("Nature", "river"),
+                    new Category("Nature", "beach"),
+                    new Category("Nature", "jungle"),
+                    new Category("Nature", "garden"),
+                    new Category("Nature", "flower"),
+                    new Category("Nature", "breeze"),
+                    new Category("Nature", "storm"),
+                    new Category("Nature", "snowy"),
+
+                    // Objects
+                    new Category("Objects", "chair"),
+                    new Category("Objects", "table"),
+                    new Category("Objects", "clock"),
+                    new Category("Objects", "phone"),
+                    new Category("Objects", "camera"),
+                    new Category("Objects", "window"),
+                    new Category("Objects", "ticket"),
+                    new Category("Objects", "luggage"),
+
+                    // Actions
+                    new Category("Actions", "dance"),
+                    new Category("Actions", "drink"),
+                    new Category("Actions", "drive"),
+                    new Category("Actions", "watch"),
+                    new Category("Actions", "learn"),
+                    new Category("Actions", "write"),
+                    new Category("Actions", "paint"),
+                    new Category("Actions", "build"),
+                    new Category("Actions", "clean"),
+
+                    // Places
+                    new Category("Places", "house"),
+                    new Category("Places", "school"),
+                    new Category("Places", "office"),
+                    new Category("Places", "store"),
+                    new Category("Places", "hotel"),
+
+                    // Seasons & Time
+                    new Category("Seasons", "summer"),
+                    new Category("Seasons", "winter"),
+                    new Category("Seasons", "spring"),
+                    new Category("Seasons", "autumn"),
+                    new Category("Time", "weekend"),
+                    new Category("Time", "holiday"),
+
+                    // People
+                    new Category("People", "friend"),
+                    new Category("People", "family"),
+                    new Category("People", "teacher"),
+                    new Category("People", "student"),
+
+                    // Descriptive
+                    new Category("Descriptive", "bright"),
+                    new Category("Descriptive", "shadow"),
+                    new Category("Descriptive", "wooden"),
+                    new Category("Descriptive", "happy"),
+                    new Category("Descriptive", "sleep"),
+                    new Category("Descriptive", "laugh")};
             //status
             String board = ""; //symbolizes the lines for each letter (Ex: _______)
             boolean solved = false;
@@ -22,20 +94,22 @@ public class Main {
             Random random = new Random();
 
             int randomIndex = random.nextInt(words.length);
-            String randomWord = words[randomIndex];
-            int randomWordLength = randomWord.length();
+            Category randomWord = words[randomIndex];
+            int randomWordLength = randomWord.getWord().length();
 
             for(int i = 0; i < randomWordLength; i++){
                 board+="_";
             }
 
             System.out.println("Lets play Hangman!");
-            System.out.printf("Your word is %d letters long\n\n", randomWordLength);
+            System.out.printf("The category is %s", randomWord.getCategoryName());
+            System.out.printf("\nYour word is %d letters long\n\n", randomWordLength);
 
             ArrayList<Character> lettersGuessed = new ArrayList<>();
 
 
-        while (!solved && lives != 0) {
+        while (!solved) {
+            if (lives == 0) break;
             System.out.print("Guess a letter: ");
             char letter = sc.nextLine().charAt(0);
 
@@ -51,7 +125,7 @@ public class Main {
             lettersGuessed.add(letter);
             for (int i = 0; i < randomWordLength; i++) {
 
-                if (randomWord.charAt(i) == letter) {
+                if (randomWord.getWord().charAt(i) == letter) {
                     board = board.substring(0, i) + letter + board.substring(i + 1);
                     numLettersFound++;
                 }
@@ -64,11 +138,11 @@ public class Main {
                 System.out.printf("\nNo letters found. %d lives left\n", lives);
 
             }
-            if (board.equals(randomWord))
+            if (board.equals(randomWord.getWord()))
                 solved = true;
 
         }
-        if (board.equals(randomWord))
+        if (board.equals(randomWord.getWord()))
             System.out.println("You win!");
         else
             System.out.println("You loose");
